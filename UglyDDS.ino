@@ -1,4 +1,4 @@
-/* UglyDDS - Alpha Version 2
+/* UglyDDS - Alpha Version 3
  * VFO & BFO frequency only
  *  
  * Just "copy & paste" from others. What have I done? :) 
@@ -68,8 +68,7 @@ void setup() {
 /* LSB / USB        */
 /********************/
 
-bfo=IF-sb ; //LSB
-//bfo=IF+sb ; //USB
+bfo=IF-sb ; //LSB or USB. Just change "-" with "+"
 
 /********************/
 /* OLED 128x64      */
@@ -107,14 +106,14 @@ bfo=IF-sb ; //LSB
 /*CLK0 - PLLA - VFO      */
 /*************************/
   si5351.set_ms_source(SI5351_CLK0, SI5351_PLLA);
-  si5351.drive_strength(SI5351_CLK0, SI5351_CLK_DRIVE_STRENGTH_4MA); //change to suit (2MA/4MA/6MA/8MA)  
+  si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_4MA); //change to suit (2MA/4MA/6MA/8MA)  
   si5351.set_freq((IF-vfo)*100ULL,SI5351_CLK0);
 
 /*************************/
 /*CLK2 - PLLB - BFO      */
 /*************************/ 
   si5351.set_ms_source(SI5351_CLK2, SI5351_PLLB);
-  si5351.drive_strength(SI5351_CLK2, SI5351_CLK_DRIVE_STRENGTH_2MA); //change to suit (2MA/4MA/6MA/8MA)
+  si5351.drive_strength(SI5351_CLK2, SI5351_DRIVE_2MA); //change to suit (2MA/4MA/6MA/8MA)
   si5351.set_freq(bfo*100ULL, SI5351_CLK2);
 
 /************************************************/

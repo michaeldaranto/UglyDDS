@@ -1,4 +1,4 @@
-/* UglyDDS - Alpha Version 3
+/* UglyDDS - Beta Version 1
  * VFO & BFO frequency only
  *  
  * Just "copy & paste" from others. What have I done? :) 
@@ -34,7 +34,7 @@
 #include <MD_REncoder.h>
 #define pinA 2
 #define pinB 3
-int s= 7; //Switch button
+int s= 7; //Switch button - change to suit
 
 // 0X3C+SA0 - 0x3C or 0x3D
 #define I2C_ADDRESS 0x3C
@@ -46,11 +46,7 @@ Si5351 si5351;
 SSD1306AsciiWire oled;
 MD_REncoder R = MD_REncoder(pinA, pinB);
 
-long bfo;
-
-long IF = 12000000; //IF freq - change to suit
-long sb = 1500; // side band - change to suit
-
+long bfo = 11999500; //for 12Mhz xtall - change to suit
 long vfo = 7030000  ; //start freq - change to suit
 volatile uint32_t radix = 100;  //start step size - change to suit
 boolean changed_f = 0;
@@ -63,12 +59,6 @@ void setup() {
   Wire.setClock(400000L);
   
   R.begin(); //Encoder init
-  
-/********************/
-/* LSB / USB        */
-/********************/
-
-bfo=IF-sb ; //LSB or USB. Just change "-" with "+"
 
 /********************/
 /* OLED 128x64      */
@@ -99,15 +89,15 @@ bfo=IF-sb ; //LSB or USB. Just change "-" with "+"
 /*Increase/decrease cal_factor value to change output freq    */
 /*Default = 0                                                 */  
 /**************************************************************/ 
-  int32_t cal_factor = 0;
+  int32_t cal_factor = 0; //change to suit
   si5351.set_correction(cal_factor, SI5351_PLL_INPUT_XO);
 
 /*************************/
-/*CLK0 - PLLA - VFO      */
+/*CLK0 - PLLA - VFO/LO   */
 /*************************/
   si5351.set_ms_source(SI5351_CLK0, SI5351_PLLA);
-  si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_4MA); //change to suit (2MA/4MA/6MA/8MA)  
-  si5351.set_freq((IF-vfo)*100ULL,SI5351_CLK0);
+  si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_6MA); //change to suit (2MA/4MA/6MA/8MA)  
+  si5351.set_freq((bfo-vfo)*100ULL,SI5351_CLK0);
 
 /*************************/
 /*CLK2 - PLLB - BFO      */
@@ -137,8 +127,8 @@ void loop()
  if (changed_f==1) // Update the display if the frequency has been changed
   {
     display_frequency();
- // si5351.set_freq(vfo*100ULL,SI5351_CLK0);
-    si5351.set_freq((IF-vfo)*100ULL,SI5351_CLK0);
+ // si5351.set_freq(vfo*100ULL,SI5351_CLK0); //for calibration
+    si5351.set_freq((bfo-vfo)*100ULL,SI5351_CLK0);
     changed_f = 0;
   }
   

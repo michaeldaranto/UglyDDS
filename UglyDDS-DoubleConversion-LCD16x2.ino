@@ -72,8 +72,6 @@ long BW = 2400; // 2.4KHz bandwidth
 
 long bfo = IF2-(BW/2); //LSB mode, change to IF2+(BW/2) for MSB 
 
-
-
 long vfo = 7000000  ; //start freq - change to suit
 volatile uint32_t radix = 100;  //start step size - change to suit
 boolean changed_f = 0;

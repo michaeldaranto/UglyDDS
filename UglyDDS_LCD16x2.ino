@@ -64,7 +64,16 @@ Si5351 si5351;
 
 MD_REncoder R = MD_REncoder(pinA, pinB);
 
-long bfo = 11999500; //for 12Mhz xtall - change to suit
+/************************************/
+/*  IF = 12MHz,  BW= 2.4 KHz        */
+/*  Change all parameters to suit   */
+/************************************/
+
+long IF = 12000000;  // 12MHz xtal
+long BW = 2400; // 2.4KHz bandwidth
+
+long bfo = IF-(BW/2); //LSB mode, change to IF+(BW/2) for MSB 
+
 long vfo = 7030000  ; //start freq - change to suit
 volatile uint32_t radix = 100;  //start step size - change to suit
 boolean changed_f = 0;

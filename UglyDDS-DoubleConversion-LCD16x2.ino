@@ -61,17 +61,21 @@ Si5351 si5351;
 
 MD_REncoder R = MD_REncoder(pinA, pinB);
 
-/*********************************/
-/*  IF1 = 21.4MHz & IF2 = 10MHz  */
-/*  Change to suit               */
-/*********************************/
+/************************************************/
+/*  IF1 = 21.4MHz,  IF2 = 10MHz,  BW= 2.4 KHz   */
+/*  Change all parameters to suit               */
+/************************************************/
 
-long IF1 = 21400000; //21.4MHz xtal, change to suit
-long bfo=9998800; //10MHz xtal, change to suit
+long IF1 = 21400000;  // 21.4MHz xtal
+long IF2 = 10000000;  // 10MHz xtal
+long BW = 2400; // 2.4KHz bandwidth
+
+long bfo = IF2-(BW/2); //LSB mode, change to IF2+(BW/2) for MSB 
+
 
 
 long vfo = 7000000  ; //start freq - change to suit
-volatile uint32_t radix = 10;  //start step size - change to suit
+volatile uint32_t radix = 100;  //start step size - change to suit
 boolean changed_f = 0;
 
 
